@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 9077353690553202457}
   - component: {fileID: 8278787689328188734}
   - component: {fileID: 6947475265261479587}
+  - component: {fileID: 2025749891027406252}
   m_Layer: 0
   m_Name: Cell
-  m_TagString: Untagged
+  m_TagString: Cell
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -83,6 +84,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2025749891027406252
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7888198981903285846}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.010306971, y: 0.010331411, z: 0.010452531}
+  m_Center: {x: 0.0000006556511, y: -0.00000027404167, z: 0.000014377292}
 --- !u!1 &7922775300101207257
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,3 +142,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34bf2ae5e824d4b4ebcb362dc447fc70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _waySelector: {fileID: 7220475221758433752, guid: 94cdafcd202032445bde5a4ee2bdf8f8,
+    type: 3}

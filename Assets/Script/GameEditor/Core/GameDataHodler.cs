@@ -1,7 +1,8 @@
 
 using GameEditor.Data;
+using UnityEngine;
 
-public static class GameDataHodler 
+public static class GameDataHodler
 {
     private static BoardData _boardData;
 
@@ -12,6 +13,6 @@ public static class GameDataHodler
 
     public static BoardData GetBoardData()
     {
-        return _boardData;
+        return _boardData != null ? _boardData : JsonUtility.FromJson<BoardData>(PlayerPrefs.GetString("BoardData"));
     }
 }

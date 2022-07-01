@@ -1,4 +1,5 @@
 using GameEditor.Data;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -21,15 +22,198 @@ namespace GameEditor.Core
         [SerializeField]
         private Button _gameButton;
 
+        [SerializeField]
+        private Button _selectStartCellButton;
+
+        [SerializeField]
+        private Button _selectEndCellButton;
+
+        [SerializeField]
+        private Button _selectDirectionMode;
 
         public EditorRow[] Rows => _rows;
+
+        private CellVector _startCellIndex;
+        private CellVector _endCellIndex;
+
 
         private void Awake()
         {
             _saveButton.onClick.AddListener(SaveData);
             _clearButton.onClick.AddListener(OnClearButtonClicked);
             _gameButton.onClick.AddListener(OnGameButtonClicked);
+            _selectStartCellButton.onClick.AddListener(OnSelectStartCellButtonClicked);
+            _selectEndCellButton.onClick.AddListener(OnSelectEndCellButtonClicked);
+            _selectDirectionMode.onClick.AddListener(OnSelectDirectionModeButtonClicked);
+
+            BoardData boardData = JsonUtility.FromJson<BoardData>(PlayerPrefs.GetString("BoardData"));
+            SetBoard(boardData);
+
         }
+
+        private void OnSelectDirectionModeButtonClicked()
+        {
+            int rowLength = _rows.Length;
+            for (int i = 0; i < rowLength; i++)
+            {
+                int length = _rows[i].Cells.Length;
+                for (int j = 0; j < length; j++)
+                {
+                    _rows[i].Cells[j].SelecCellMode(OnSelectDirectionCellClicked);
+                }
+            }
+        }
+
+        private CellVector? _selectDirectionStartCell;
+
+        private void OnSelectDirectionCellClicked(CellVector index)
+        {
+
+            if (_selectDirectionStartCell == null)
+            {
+                _selectDirectionStartCell = index;
+                _rows[_selectDirectionStartCell.Value.X].Cells[_selectDirectionStartCell.Value.Y].SetAsDirectionSelector();
+            }
+            else
+            {
+                if (_selectDirectionStartCell == index)
+                {
+                    _rows[_selectDirectionStartCell.Value.X].Cells[_selectDirectionStartCell.Value.Y].CleareMoveDirections();
+                    _selectDirectionStartCell = null;
+
+                }
+                else
+                {
+
+                    CellVector direction = index - _selectDirectionStartCell.Value;
+                    if (direction.X <= 1 && direction.X >= -1 && direction.Y <= 1 && direction.Y >= -1)
+                        _rows[_selectDirectionStartCell.Value.X].Cells[_selectDirectionStartCell.Value.Y].AddMoveDirection(direction);
+
+                    _selectDirectionStartCell = null;
+                }
+
+                int rowLength = _rows.Length;
+                for (int i = 0; i < rowLength; i++)
+                {
+                    int length = _rows[i].Cells.Length;
+                    for (int j = 0; j < length; j++)
+                    {
+                        _rows[i].Cells[j].SetAsDefult();
+                    }
+                }
+                if (_startCellIndex != null)
+                {
+                    _rows[_startCellIndex.X].Cells[_startCellIndex.Y].SetAsStartNode();
+                }
+                if (_endCellIndex != null)
+                {
+                    _rows[_endCellIndex.X].Cells[_endCellIndex.Y].SetAsEndNode();
+                }
+            }
+        }
+
+        private void OnSelectEndCellButtonClicked()
+        {
+            int rowLength = _rows.Length;
+            for (int i = 0; i < rowLength; i++)
+            {
+                int length = _rows[i].Cells.Length;
+                for (int j = 0; j < length; j++)
+                {
+                    _rows[i].Cells[j].SelecCellMode(OnEndCellChoosed);
+                }
+            }
+        }
+
+        private void OnEndCellChoosed(CellVector cellIndex)
+        {
+            _endCellIndex = cellIndex;
+            int rowLength = _rows.Length;
+            for (int i = 0; i < rowLength; i++)
+            {
+                int length = _rows[i].Cells.Length;
+                for (int j = 0; j < length; j++)
+                {
+                    _rows[i].Cells[j].ToggleCellMode();
+                    _rows[i].Cells[j].SetAsDefult();
+                }
+            }
+            if (_startCellIndex != null)
+            {
+                _rows[_startCellIndex.X].Cells[_startCellIndex.Y].SetAsStartNode();
+            }
+            if (_endCellIndex != null)
+            {
+                _rows[_endCellIndex.X].Cells[_endCellIndex.Y].SetAsEndNode();
+            }
+        }
+
+        private void OnSelectStartCellButtonClicked()
+        {
+            int rowLength = _rows.Length;
+            for (int i = 0; i < rowLength; i++)
+            {
+                int length = _rows[i].Cells.Length;
+                for (int j = 0; j < length; j++)
+                {
+                    _rows[i].Cells[j].SelecCellMode(OnStartCellChoosed);
+                }
+            }
+        }
+
+        private void OnStartCellChoosed(CellVector cellIndex)
+        {
+            _startCellIndex = cellIndex;
+            int rowLength = _rows.Length;
+
+
+            for (int i = 0; i < rowLength; i++)
+            {
+                int length = _rows[i].Cells.Length;
+                for (int j = 0; j < length; j++)
+                {
+                    _rows[i].Cells[j].ToggleCellMode();
+                    _rows[i].Cells[j].SetAsDefult();
+                }
+            }
+            if (_startCellIndex != null)
+            {
+                _rows[_startCellIndex.X].Cells[_startCellIndex.Y].SetAsStartNode();
+            }
+            if (_endCellIndex != null)
+            {
+                _rows[_endCellIndex.X].Cells[_endCellIndex.Y].SetAsEndNode();
+            }
+        }
+
+
+        private void SetBoard(BoardData boardData)
+        {
+            int rowLength = _rows.Length;
+            for (int i = 0; i < rowLength; i++)
+            {
+                int cellLength = _rows[i].Cells.Length;
+                for (int j = 0; j < cellLength; j++)
+                {
+                    EditorCell cell = _rows[i].Cells[j];
+                    cell.SetData(boardData.Row[i].CellData[j], new CellVector(i, j));
+                    cell.ToggleCellMode();
+                    cell.SetAsDefult();
+                }
+            }
+            _startCellIndex = boardData.StartCell;
+            _endCellIndex = boardData.EndCell;
+
+            if (_startCellIndex != null)
+            {
+                _rows[_startCellIndex.X].Cells[_startCellIndex.Y].SetAsStartNode();
+            }
+            if (_endCellIndex != null)
+            {
+                _rows[_endCellIndex.X].Cells[_endCellIndex.Y].SetAsEndNode();
+            }
+        }
+
 
         private void OnGameButtonClicked()
         {
@@ -54,7 +238,7 @@ namespace GameEditor.Core
         private void SaveData()
         {
 
-            BoardData boardData = new BoardData(_rows.Length, _rows[0].Cells.Length);
+            BoardData boardData = new BoardData(_startCellIndex, _endCellIndex, _rows.Length, _rows[0].Cells.Length);
 
             int rowLength = _rows.Length;
             for (int i = 0; i < rowLength; i++)
@@ -63,12 +247,22 @@ namespace GameEditor.Core
                 for (int j = 0; j < cellLength; j++)
                 {
                     EditorCell cell = _rows[i].Cells[j];
-                    int heightLevel = cell.IsCellEnable ? cell.HeightLevel : 0;
-                    boardData.AddCellData(i, j, heightLevel);
+                    List<CellVector> avalabelDirection = new List<CellVector>();
+                    int length = avalabelDirection.Count;
+                    for (int h = 0; h < length; h++)
+                    {
+                        CellVector moveDirection = cell.Arrows[h].MoveDirection;
+                        if (!avalabelDirection.Contains(moveDirection))
+                        avalabelDirection.Add(moveDirection);
+                    }
+
+                    boardData.AddCellData(i, j, new EditorCellData(cell.IsCellEnable, avalabelDirection.ToArray()));
 
                 }
             }
 
+            string stringData = JsonUtility.ToJson(boardData);
+            PlayerPrefs.SetString("BoardData", stringData);
             GameDataHodler.SetBoardData(boardData);
         }
     }
