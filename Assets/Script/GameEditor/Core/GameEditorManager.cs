@@ -1,5 +1,6 @@
 using GameEditor.Data;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace GameEditor.Core
@@ -25,16 +26,15 @@ namespace GameEditor.Core
 
         private void Awake()
         {
-            _saveButton.onClick.AddListener(OnSaveButtonClicked);
+            _saveButton.onClick.AddListener(SaveData);
             _clearButton.onClick.AddListener(OnClearButtonClicked);
             _gameButton.onClick.AddListener(OnGameButtonClicked);
         }
 
         private void OnGameButtonClicked()
         {
-
-
-
+            SaveData();
+            SceneManager.LoadScene(1);
         }
 
         private void OnClearButtonClicked()
@@ -51,7 +51,7 @@ namespace GameEditor.Core
             }
         }
 
-        private void OnSaveButtonClicked()
+        private void SaveData()
         {
 
             BoardData boardData = new BoardData(_rows.Length, _rows[0].Cells.Length);
