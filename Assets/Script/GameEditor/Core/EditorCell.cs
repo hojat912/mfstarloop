@@ -1,4 +1,4 @@
-using GameEditor.Data;
+using GameData;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -59,11 +59,7 @@ namespace GameEditor.Core
             _onSelected = onSelected;
             _enableToggle.enabled = false;
             _button.enabled = true;
-            int count = _arrows.Count;
-            for (int i = 0; i < count; i++)
-            {
-                _arrows[i].Activate(false);
-            }
+
         }
 
         public void ToggleCellMode()
@@ -71,11 +67,7 @@ namespace GameEditor.Core
             _onSelected = null;
             _enableToggle.enabled = true;
             _button.enabled = false;
-            int count = _arrows.Count;
-            for (int i = 0; i < count; i++)
-            {
-                _arrows[i].Activate(false);
-            }
+
 
         }
 
@@ -84,11 +76,6 @@ namespace GameEditor.Core
             _onSelected = onSelected;
             _enableToggle.enabled = false;
             _button.enabled = true;
-            int count = _arrows.Count;
-            for (int i = 0; i < count; i++)
-            {
-                _arrows[i].Activate(true);
-            }
 
         }
 
@@ -109,6 +96,14 @@ namespace GameEditor.Core
 
         public void AddMoveDirection(CellVector direction)
         {
+            for (int i = 0; i < _arrows.Count; i++)
+            {
+                if (_arrows[i].MoveDirection== direction)
+                {
+                    return;
+                }
+            }
+
             EditorDirectionArrow arrow = Instantiate(_arrowPrefab, transform);
             arrow.SetMoveDirection(direction);
             _arrows.Add(arrow);
