@@ -2,54 +2,53 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 using UnityEngine.UI;
 
-public class EditorDirectionArrow : MonoBehaviour
+namespace GameEditor.Core
 {
-    [SerializeField]
-    private Image[] _images;
-
-    [SerializeField]
-    private CellVector _moveDirection;
-
-    public CellVector MoveDirection => _moveDirection; 
-
-    private void Awake()
+    public class EditorDirectionArrow : MonoBehaviour
     {
-        int length = _images.Length;
-        Color color = new Color(Random.Range(0.1f, 0.5f), Random.Range(0.1f, 0.5f), Random.Range(0.1f, 0.5f), 0.75f);
+        [SerializeField]
+        private Image[] _images;
 
-        for (int i = 0; i < length; i++)
+        [SerializeField]
+        private CellVector _moveDirection;
+
+        public CellVector MoveDirection => _moveDirection;
+
+        private void Awake()
         {
-            _images[i].color = color;
+            int length = _images.Length;
+            Color color = new Color(Random.Range(0.1f, 0.5f), Random.Range(0.1f, 0.5f), Random.Range(0.1f, 0.5f), 0.75f);
+
+            for (int i = 0; i < length; i++)
+            {
+                _images[i].color = color;
+            }
         }
-    }
 
 
-    public void SetMoveDirection(CellVector direction)
-    {
-        _moveDirection = direction;
-        if (direction == CellVector.Down)
+        public void SetMoveDirection(CellVector direction)
         {
-            transform.eulerAngles = new Vector3(0, 0, 180);
+            _moveDirection = direction;
+            if (direction == CellVector.Down)
+            {
+                transform.eulerAngles = new Vector3(0, 0, -90);
 
-        }
-        else if (direction == CellVector.Up)
-        {
-            transform.eulerAngles = new Vector3(0, 0, 0);
+            }
+            else if (direction == CellVector.Up)
+            {
+                transform.eulerAngles = new Vector3(0, 0, 90);
 
-        }
-        else if (direction == CellVector.Right)
-        {
-            transform.eulerAngles = new Vector3(0, 0, 90);
+            }
+            else if (direction == CellVector.Right)
+            {
+                transform.eulerAngles = new Vector3(0, 0, 0);
 
+            }
+            else if (direction == CellVector.Left)
+            {
+                transform.eulerAngles = new Vector3(0, 0, 180);
+            }
         }
-        else if (direction == CellVector.Left)
-        {
-            transform.eulerAngles = new Vector3(0, 0, -90);
-        }
-    }
 
-    public void Activate(bool value)
-    {
-        gameObject.SetActive(value);
     }
 }

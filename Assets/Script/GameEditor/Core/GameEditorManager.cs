@@ -1,5 +1,4 @@
-using GameEditor.Data;
-using System.Collections.Generic;
+using GameData;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -46,7 +45,7 @@ namespace GameEditor.Core
             _selectEndCellButton.onClick.AddListener(OnSelectEndCellButtonClicked);
             _selectDirectionMode.onClick.AddListener(OnSelectDirectionModeButtonClicked);
 
-            BoardData boardData = JsonUtility.FromJson<BoardData>(PlayerPrefs.GetString("BoardData"));
+            BoardData boardData = GameDataHodler.GetBoardData();
             SetBoard(boardData);
 
         }
@@ -218,7 +217,7 @@ namespace GameEditor.Core
         private void OnGameButtonClicked()
         {
             SaveData();
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(0);
         }
 
         private void OnClearButtonClicked()
@@ -247,16 +246,16 @@ namespace GameEditor.Core
                 for (int j = 0; j < cellLength; j++)
                 {
                     EditorCell cell = _rows[i].Cells[j];
-                    List<CellVector> avalabelDirection = new List<CellVector>();
-                    int length = avalabelDirection.Count;
-                    for (int h = 0; h < length; h++)
+                    int count = cell.Arrows.Count;
+                    CellVector[] avalabelDirection = new CellVector[count];
+
+                    for (int h = 0; h < count; h++)
                     {
                         CellVector moveDirection = cell.Arrows[h].MoveDirection;
-                        if (!avalabelDirection.Contains(moveDirection))
-                        avalabelDirection.Add(moveDirection);
+                        avalabelDirection[h] = moveDirection;
                     }
 
-                    boardData.AddCellData(i, j, new EditorCellData(cell.IsCellEnable, avalabelDirection.ToArray()));
+                    boardData.AddCellData(i, j, new EditorCellData(cell.IsCellEnable, avalabelDirection));
 
                 }
             }
