@@ -135,7 +135,6 @@ GameObject:
   - component: {fileID: 250956482}
   - component: {fileID: 250956481}
   - component: {fileID: 250956480}
-  - component: {fileID: 250956479}
   m_Layer: 5
   m_Name: Root
   m_TagString: Untagged
@@ -163,36 +162,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &250956479
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 250956477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.6367924, b: 0.6367924, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!222 &250956480
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -251,7 +220,6 @@ GameObject:
   m_Component:
   - component: {fileID: 466105501}
   - component: {fileID: 466105505}
-  - component: {fileID: 466105504}
   - component: {fileID: 466105506}
   m_Layer: 5
   m_Name: DiceSelector
@@ -281,36 +249,6 @@ RectTransform:
   m_AnchoredPosition: {x: 100, y: 100}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &466105504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 466105500}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.740566, b: 0.740566, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
 --- !u!222 &466105505
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1942,6 +1880,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cellPrefabs:
   - {fileID: 7922775300101207258, guid: 57bfff8584f7a8a45bcdffeab167c15b, type: 3}
+  _endPointCell: {fileID: 7922775300101207258, guid: a2f50bafab63cbd479ac9b966059da31,
+    type: 3}
   _emptyCells:
   - {fileID: 559949545666570845, guid: 3c16044a503a2bf479f7394e5c74e71f, type: 3}
   _playerPrefab: {fileID: 806323574815708048, guid: da380970bd30ddb4288097470aada3db,

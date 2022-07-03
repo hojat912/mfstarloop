@@ -1,7 +1,6 @@
 using GameData;
 using System;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,10 +26,24 @@ namespace GameEditor.Core
 
         public List<EditorDirectionArrow> Arrows => _arrows; 
 
-        private void Awake()
+        public void SetData(EditorCellData cellData, CellVector cellIndex)
         {
             _button.onClick.AddListener(OnButtonClicked);
+            _enableToggle.onValueChanged.AddListener(OnToggleValueChanged);
             _arrows = new List<EditorDirectionArrow>();
+            _cellIndex = cellIndex;
+            _enableToggle.isOn = cellData.IsOn;
+            int length = cellData.AvalabelDirections.Length;
+            for (int i = 0; i < length; i++)
+            {
+                AddMoveDirection(cellData.AvalabelDirections[i]);
+            }
+        }
+
+        private void OnToggleValueChanged(bool value)
+        {
+            if(!value)
+                CleareMoveDirections();
         }
 
         private void OnButtonClicked()
@@ -41,18 +54,9 @@ namespace GameEditor.Core
         public void Clear()
         {
             _enableToggle.isOn = false;
+            CleareMoveDirections();
         }
 
-        public void SetData(EditorCellData cellData, CellVector cellIndex)
-        {
-            _cellIndex = cellIndex;
-            _enableToggle.isOn = cellData.IsOn;
-            int length = cellData.AvalabelDirections.Length;
-            for (int i = 0; i < length; i++)
-            {
-                AddMoveDirection(cellData.AvalabelDirections[i]);
-            }
-        }
 
         public void SelecCellMode(Action<CellVector> onSelected)
         {

@@ -1,4 +1,5 @@
 using GameData;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -30,6 +31,9 @@ namespace GameEditor.Core
         [SerializeField]
         private Button _selectDirectionMode;
 
+        [SerializeField]
+        private Button _cellToggle;
+
         public EditorRow[] Rows => _rows;
 
         private CellVector _startCellIndex;
@@ -44,11 +48,12 @@ namespace GameEditor.Core
             _selectStartCellButton.onClick.AddListener(OnSelectStartCellButtonClicked);
             _selectEndCellButton.onClick.AddListener(OnSelectEndCellButtonClicked);
             _selectDirectionMode.onClick.AddListener(OnSelectDirectionModeButtonClicked);
-
+            _cellToggle.onClick.AddListener(OnCellToggleClicked);
             BoardData boardData = GameDataHodler.GetBoardData();
             SetBoard(boardData);
 
         }
+
 
         private void OnSelectDirectionModeButtonClicked()
         {
@@ -122,6 +127,30 @@ namespace GameEditor.Core
                     _rows[i].Cells[j].SelecCellMode(OnEndCellChoosed);
                 }
             }
+        }
+
+        private void OnCellToggleClicked()
+        {
+
+            int rowLength = _rows.Length;
+            for (int i = 0; i < rowLength; i++)
+            {
+                int length = _rows[i].Cells.Length;
+                for (int j = 0; j < length; j++)
+                {
+                    _rows[i].Cells[j].ToggleCellMode();
+                    _rows[i].Cells[j].SetAsDefult();
+                }
+            }
+            if (_startCellIndex != null)
+            {
+                _rows[_startCellIndex.X].Cells[_startCellIndex.Y].SetAsStartNode();
+            }
+            if (_endCellIndex != null)
+            {
+                _rows[_endCellIndex.X].Cells[_endCellIndex.Y].SetAsEndNode();
+            }
+
         }
 
         private void OnEndCellChoosed(CellVector cellIndex)
