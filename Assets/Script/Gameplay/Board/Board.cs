@@ -9,6 +9,10 @@ namespace Gameplay.BoardManagment
     {
         [SerializeField]
         private Cell[] _cellPrefabs;
+
+        [SerializeField]
+        private Cell _endPointCell;
+
         [SerializeField]
         private GameObject[] _emptyCells;
         [SerializeField]
@@ -24,7 +28,7 @@ namespace Gameplay.BoardManagment
         {
             _serviceLocator = serviceLocator;
             BoardData boardData = GameDataHodler.GetBoardData();
-            CreateBoard(boardData);
+            CreateBoard(boardData, boardData.EndCell);
             CreatePlayer(boardData.StartCell, boardData.EndCell);
         }
 
@@ -37,7 +41,7 @@ namespace Gameplay.BoardManagment
             ai.SetData(startCell, endCell, _serviceLocator);
         }
 
-        private bool[,] CreateBoard(BoardData boardData)
+        private bool[,] CreateBoard(BoardData boardData, CellVector endCell)
         {
             int rowLength = boardData.Row.Length;
             bool[,] filledCellMap = new bool[boardData.Row.Length, boardData.Row[0].CellData.Length];
@@ -50,6 +54,7 @@ namespace Gameplay.BoardManagment
                 int length = cellData.Length;
 
                 GameObject rowGameObject = new GameObject($"Row{i}");
+                rowGameObject.transform.SetParent(transform);
                 for (int j = 0; j < length; j++)
                 {
 
@@ -57,11 +62,23 @@ namespace Gameplay.BoardManagment
                     {
                         int horizontalIndex = i - (rowLength / 2);
                         int verticalIndex = j - (length / 2);
-                        Cell randomCell = _cellPrefabs[Random.Range(0, _cellPrefabs.Length)];
-                        Cell cell = Instantiate(randomCell, new Vector3(horizontalIndex, verticalIndex, 0), Quaternion.identity);
+                        CellVector cellIndex = new CellVector(i, j);
+
+                        Cell selectedCellPrefab = null;
+
+                        if (cellIndex == endCell)
+                        {
+                            selectedCellPrefab = _endPointCell;
+                        }
+                        else
+                        {
+                            selectedCellPrefab = _cellPrefabs[Random.Range(0, _cellPrefabs.Length)];
+                        }
+
+                        Cell cell = Instantiate(selectedCellPrefab, new Vector3(horizontalIndex, verticalIndex, 0), Quaternion.identity);
                         cell.transform.localScale = new Vector3(1f, 1f, 1f);
                         cell.transform.SetParent(rowGameObject.transform);
-                        cell.SetData(new CellVector(i, j), cellData[j].AvalabelDirections);
+                        cell.SetData(cellIndex, cellData[j].AvalabelDirections);
                         filledCellMap[i, j] = true;
                         _cells[i, j] = cell;
                     }
